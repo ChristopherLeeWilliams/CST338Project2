@@ -1,0 +1,20 @@
+<resources>
+    <string name="app_name">Project_2_Part_3</string>
+
+    <string name="main_menu_title">Otter Library System</string>
+    <string name="create_account_button">Create Account</string>
+    <string name="place_hold_button">Place Hold</string>
+    <string name="cancel_hold_button">Cancel Hold</string>
+    <string name="manage_system_button">Manage System</string>
+
+    <string name="create_account_title">Create an Account</string>
+    <string name="username">Username: </string>
+    <string name="password">Password: </string>
+
+    <string name="place_hold_title">Place Hold</string>
+    <string name="pickupDate">Pickup Date </string>
+    <string name="returnDate">Return Date </string>
+    <string name="date">Date: </string>
+    <string name="time">Time: </string>
+    <string name="submit">Submit</string>
+</resources>
