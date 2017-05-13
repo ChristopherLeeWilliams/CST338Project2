@@ -2,6 +2,7 @@ package will6366.project_2_part_3;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
@@ -31,25 +32,27 @@ import will6366.project_2_part_3.helperObjects.Book;
 
 public class PlaceHold extends AppCompatActivity {
 
-    private static final String TAG = "PlaceHold";
-
     private TextView mPickupDate;
     private TextView mPickupTime;
     private TextView mReturnDate;
     private TextView mReturnTime;
     private Button mPickupDateButton;
     private Button mReturnDateButton;
-    private DatePickerDialog.OnDateSetListener mOnDateSetListeners;
-    private DatePickerDialog.OnDateSetListener mOnDateSetListeners2;
-    private TimePickerDialog.OnTimeSetListener mOnTimeSetListeners;
-    private TimePickerDialog.OnTimeSetListener mOnTimeSetListeners2;
+    private DatePickerDialog.OnDateSetListener mOnPickupDateSetListeners;
+    private DatePickerDialog.OnDateSetListener mOnReturnDateSetListeners;
+    private TimePickerDialog.OnTimeSetListener mOnPickupTimeSetListeners;
+    private TimePickerDialog.OnTimeSetListener mOnReturnTimeSetListeners;
 
-    String pickupDate,pickupTime, returnDate, returnTime;
-    ArrayList<Book> books;
-    ArrayList<String> bookStrings;
+    private int numberOfErrors = 0;
+    private static final String TAG = "PlaceHold";
+
+    int pDay,pMonth,pYear,pHour,pMinute = 0;
+    int rDay,rMonth,rYear,rHour,rMinute = 0;
+    long holdHours;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_hold);
 
@@ -61,32 +64,6 @@ public class PlaceHold extends AppCompatActivity {
         mReturnDateButton = (Button) findViewById(R.id.return_date_button);
 
 
-        DatabaseHelper db = new DatabaseHelper(this);
-
-        Spinner dropdown = (Spinner)findViewById(R.id.book_drop_down);
-
-        books = db.getAllBooks();
-        bookStrings = db.getAllBookTitlesWithAuthors();
-
-        ArrayAdapter<String> bookAdapter  = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bookStrings);
-        dropdown.setAdapter(bookAdapter);
-        dropdown.setSelection(0);
-
-        //Log.d(TAG,"0:"+books.get(0)+"\n1:"+books.get(1));
-        //Log.d(TAG,"\n0:"+bookStrings.get(0)+"\n1:"+bookStrings.get(1));
-
-        dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.d(TAG,"From array: "+bookStrings.get(position)+"\nFrom DB: "+books.get(position));
-            }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                // sometimes you need nothing here
-            }
-        });
-
-
         mPickupDateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,20 +73,22 @@ public class PlaceHold extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(PlaceHold.this,
-                        android.R.style.Theme_Holo_Dialog, mOnDateSetListeners,year, month, day);
+                        android.R.style.Theme_Holo_Dialog, mOnPickupDateSetListeners,year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
 
-        mOnDateSetListeners = new DatePickerDialog.OnDateSetListener() {
+        mOnPickupDateSetListeners = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 // pickup date
-                month = month + 1;
-                Log.d(TAG,month+"/"+dayOfMonth+"/"+year);
-                pickupDate = String.format("%02d/%02d/%04d",month,dayOfMonth,year);
-                mPickupDate.setText(pickupDate);
+                pDay = dayOfMonth;
+                pMonth = month + 1;
+                pYear = year;
+                Log.d(TAG,pMonth+"/"+pDay+"/"+pYear);
+                //pickupDate = String.format("%02d/%02d/%04d",pDay,pMonth,pYear);
+                mPickupDate.setText(String.format("%02d/%02d/%04d",pMonth,pDay,pYear));
             }
         };
 
@@ -128,19 +107,19 @@ public class PlaceHold extends AppCompatActivity {
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
                 int minute = cal.get(Calendar.MINUTE);
 
-                TimePickerDialog timeDialogue = new TimePickerDialog(PlaceHold.this, mOnTimeSetListeners,hour,minute, true);
+                TimePickerDialog timeDialogue = new TimePickerDialog(PlaceHold.this, mOnPickupTimeSetListeners,hour,minute, true);
                 timeDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 timeDialogue.show();
             }
         });
 
-        mOnTimeSetListeners = new TimePickerDialog.OnTimeSetListener() {
+        mOnPickupTimeSetListeners = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                //pickup time
-                //Log.d(TAG,hourOfDay+":"+minute);
-                pickupTime = String.format("%02d:%02d:%02d",hourOfDay,minute,0);
-                mPickupTime.setText(pickupTime);
+                pHour = hourOfDay;
+                pMinute = minute;
+                Log.d(TAG,pHour+":"+pMinute);
+                mPickupTime.setText(String.format("%02d:%02d:%02d",pHour,pMinute,0));
             }
         };
 
@@ -154,20 +133,21 @@ public class PlaceHold extends AppCompatActivity {
                 int day = cal.get(Calendar.DAY_OF_MONTH);
 
                 DatePickerDialog dialog = new DatePickerDialog(PlaceHold.this,
-                        android.R.style.Theme_Holo_Dialog, mOnDateSetListeners2,year, month, day);
+                        android.R.style.Theme_Holo_Dialog, mOnReturnDateSetListeners,year, month, day);
                 dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 dialog.show();
             }
         });
 
-        mOnDateSetListeners2 = new DatePickerDialog.OnDateSetListener() {
+        mOnReturnDateSetListeners = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                 //return date
-                month = month + 1;
-                Log.d(TAG,month+"/"+dayOfMonth+"/"+year);
-                returnDate = String.format("%02d/%02d/%04d",month,dayOfMonth,year);
-                mReturnDate.setText(returnDate);
+                rDay = dayOfMonth;
+                rMonth = month + 1;
+                rYear = year;
+                Log.d(TAG,rMonth+"/"+rDay+"/"+rYear);
+                mReturnDate.setText(String.format("%02d/%02d/%04d",rMonth,rDay,rYear));
             }
         };
 
@@ -186,19 +166,20 @@ public class PlaceHold extends AppCompatActivity {
                 int hour = cal.get(Calendar.HOUR_OF_DAY);
                 int minute = cal.get(Calendar.MINUTE);
 
-                TimePickerDialog timeDialogue = new TimePickerDialog(PlaceHold.this, mOnTimeSetListeners2,hour,minute, true);
+                TimePickerDialog timeDialogue = new TimePickerDialog(PlaceHold.this, mOnReturnTimeSetListeners,hour,minute, true);
                 timeDialogue.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
                 timeDialogue.show();
             }
         });
 
-        mOnTimeSetListeners2 = new TimePickerDialog.OnTimeSetListener() {
+        mOnReturnTimeSetListeners = new TimePickerDialog.OnTimeSetListener() {
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                 // return time
-                Log.d(TAG,hourOfDay+":"+minute);
-                returnTime = String.format("%02d:%02d:%02d",hourOfDay,minute,0);
-                mReturnTime.setText(returnTime);
+                rHour = hourOfDay;
+                rMinute = minute;
+                Log.d(TAG,rHour+":"+rMinute);
+                mReturnTime.setText(String.format("%02d:%02d:%02d",rHour,rMinute,0));
             }
         };
 
@@ -207,10 +188,16 @@ public class PlaceHold extends AppCompatActivity {
 
     public void submitHold(View v) {
         if (datesSelected()) {
-            if (lessThan48Hours()) {
+            if (SevenDaysOrLess()) {
+                //TODO: Check if book is available
+                //DB requires: YYYY-MM-DD HH:MM:SS
+                String pickupDateForDB = String.format("%04d-%02d-%02d %02d:%02d:%02d",pYear,pMonth,pDay,pHour,pMinute,0);
+                String returnDateForDB = String.format("%04d-%02d-%02d %02d:%02d:%02d",rYear,rMonth,rDay,rHour,rMinute,0);
 
+                Intent i = PlaceHoldBookSelection.newIntent(PlaceHold.this,pickupDateForDB,returnDateForDB,holdHours);
+                startActivity(i);
             } else {
-                Toast.makeText(this, "Hold period cannot exceed 48 hours!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Hold period must be at least 1 minute and at most 7 days!", Toast.LENGTH_SHORT).show();
             }
 
         } else {
@@ -218,14 +205,20 @@ public class PlaceHold extends AppCompatActivity {
         }
     }
 
-    public boolean lessThan48Hours() {
+    public boolean SevenDaysOrLess() {
         DateUtils obj = new DateUtils();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("M/dd/yyyy hh:mm:ss");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MM/dd/yyyy HH:mm:ss");
+        Log.d(TAG,simpleDateFormat.toPattern());
         try {
-            Date date1 = simpleDateFormat.parse(pickupDate + " "+pickupTime);
-            Date date2 = simpleDateFormat.parse(returnDate + " "+returnTime);
+            String p = String.format("%02d/%02d/%04d %02d:%02d:%02d",pMonth,pDay,pYear,pHour,pMinute,0);
+            String r = String.format("%02d/%02d/%04d %02d:%02d:%02d",rMonth,rDay,rYear,rHour,rMinute,0);
+            Date date1  = simpleDateFormat.parse(p);
+            Date date2 = simpleDateFormat.parse(r);
 
-             return (differnceInHours(date1, date2)<=48);
+
+
+            long dif = differenceInHours(date1, date2);
+            return ((dif<=168)&&(dif>=0));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -242,7 +235,7 @@ public class PlaceHold extends AppCompatActivity {
         return true;
     }
 
-    public long differnceInHours(Date startDate, Date endDate){
+    public long differenceInHours(Date startDate, Date endDate){
         // credit: http://stackoverflow.com/questions/21285161/android-difference-between-two-dates
 
         //milliseconds
@@ -268,8 +261,8 @@ public class PlaceHold extends AppCompatActivity {
                 "%d days, %d hours, %d minutes, %d seconds%n",
                 elapsedDays,
                 elapsedHours, elapsedMinutes, elapsedSeconds));
-
-        return (elapsedHours + (elapsedDays*24));
+        holdHours = (elapsedHours + (elapsedDays*24));
+        return holdHours;
 
     }
 }

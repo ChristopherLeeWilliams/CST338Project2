@@ -11,6 +11,12 @@ public class User {
     private boolean isAdmin;
     private int userId;
 
+    public User() {
+        this.username = "";
+        this.password = "";
+        this.isAdmin = false;
+    }
+
     public User(String username, String password, boolean isAdmin) {
         this.username = username;
         this.password = password;

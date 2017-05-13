@@ -10,7 +10,7 @@ public class Book {
     private String mTitle;
     private String mAuthor;
     private int mISBN;
-    private float mHourlyFee;
+    private double mHourlyFee;
 
     public Book() {
         mTitle = "";
@@ -33,7 +33,7 @@ public class Book {
         mHourlyFee = 0;
     }
 
-    public Book(int id, String title, String author, int ISBN, float hourlyFee) {
+    public Book(int id, String title, String author, int ISBN, double hourlyFee) {
         mId = id;
         mTitle = title;
         mAuthor = author;
@@ -57,11 +57,11 @@ public class Book {
         return mAuthor;
     }
 
-    public float getHourlyFee() {
+    public double getHourlyFee() {
         return mHourlyFee;
     }
 
-    public void setHourlyFee(float hourlyFee) {
+    public void setHourlyFee(double hourlyFee) {
         mHourlyFee = hourlyFee;
     }
 

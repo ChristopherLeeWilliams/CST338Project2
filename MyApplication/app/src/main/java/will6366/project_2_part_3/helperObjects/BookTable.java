@@ -17,7 +17,7 @@ public class BookTable {
             KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             KEY_TITLE + " TEXT UNIQUE NOT NULL, " +
             KEY_AUTHOR + " TEXT NOT NULL, " +
-            KEY_ISBN + " INTEGER UNIQUE NOT NULL, " +
-            KEY_HOURLY_FEE + " FLOAT NOT NULL)";
+            KEY_ISBN + " INT UNIQUE NOT NULL, " +
+            KEY_HOURLY_FEE + " DOUBLE NOT NULL)";
 
 }

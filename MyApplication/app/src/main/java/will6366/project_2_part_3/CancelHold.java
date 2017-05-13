@@ -22,10 +22,10 @@ public class CancelHold extends AppCompatActivity {
     public void doStuff(View view) {
         DatabaseHelper db = new DatabaseHelper(this);
         try {
-            //db.addBook(new Book(1, "Hot Java", "S. Narayanan", 123101,.05f));
-            //db.addBook(new Book(1, "Fun Java", "Y. Byun", 300972, 1.0f));
-            //db.addBook(new Book(1, "Algorithm for Java", "K. Alice", 777123,.25f));
-            //db.addUser(new User("!admin2","!admin2",true));
+            db.deleteAllBooks();
+            db.addBook(new Book(1, "Hot Java", "S. Narayanan", 123101,.05));
+            db.addBook(new Book(1, "Fun Java", "Y. Byun", 300972, 1.0));
+            db.addBook(new Book(1, "Algorithm for Java", "K. Alice", 777123,.25));
         } catch (Exception e) {
             Log.d(TAG,e.getMessage());
         }

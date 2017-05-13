@@ -22,6 +22,10 @@
         </activity>
         <activity android:name=".CancelHold">
         </activity>
+        <activity android:name=".PlaceHoldLogin">
+        </activity>
+        <activity android:name=".PlaceHoldBookSelection">
+        </activity>
     </application>
 
 </manifest>
