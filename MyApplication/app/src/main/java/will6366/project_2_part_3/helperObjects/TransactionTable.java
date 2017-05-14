@@ -23,17 +23,16 @@ public class TransactionTable {
             KEY_BOOK_TITLE, KEY_BOOK_AUTHOR, KEY_BOOK_ISBN, KEY_BOOK_HOURLY_FEE, KEY_HOLD_PICKUP_DATE, KEY_HOLD_RETURN_DATE, KEY_HOLD_RESERVATION_NUMBER};
 
     public static final String CREATE_TRANSACTION_TABLE = "CREATE TABLE " + TABLE_TRANSACTIONS +"( "+
-            KEY_ID + " INTEGER PRIMARY KEY NOT NULL AUTOINCREMENT, " +
+            KEY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
             KEY_TYPE + " TEXT NOT NULL, " +
             KEY_USERNAME + " TEXT NOT NULL, " +
             KEY_TRANSACTION_DATE + " TEXT NOT NULL, " +
             KEY_TRANSACTION_TIME + " TEXT NOT NULL, " +
             KEY_BOOK_TITLE + " TEXT, " +
             KEY_BOOK_AUTHOR + " TEXT, " +
-            KEY_BOOK_ISBN + " INT , " +
+            KEY_BOOK_ISBN + " INTEGER, " +
             KEY_BOOK_HOURLY_FEE + " DOUBLE, " +
             KEY_HOLD_PICKUP_DATE + " TEXT, " +
             KEY_HOLD_RETURN_DATE + " TEXT, " +
             KEY_HOLD_RESERVATION_NUMBER + " INTEGER)";
-
 }

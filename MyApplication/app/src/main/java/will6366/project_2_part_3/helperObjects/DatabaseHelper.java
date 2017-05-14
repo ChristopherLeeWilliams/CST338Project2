@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public class DatabaseHelper extends SQLiteOpenHelper{
 
     private static final String DATABASE_NAME = "sqlite_master";
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 3;
 
     public DatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -26,6 +26,7 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         sqLiteDatabase.execSQL(UserTable.CREATE_USER_TABLE);
         sqLiteDatabase.execSQL(HoldTable.CREATE_HOLD_TABLE);
         sqLiteDatabase.execSQL(TransactionTable.CREATE_TRANSACTION_TABLE);
+
     }
 
     @Override
@@ -69,12 +70,12 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     }
 
     public void addTransaction(Transaction t) throws SQLException {
-        Log.d("addTransaction", transaction.toString());
+        Log.d("addTransaction", t.toString());
         SQLiteDatabase db = this.getWritableDatabase();
 
         ContentValues values = new ContentValues();
 
-        values.put(TransactionTable.KEY_ID, t.getTransactionId());
+        //values.put(TransactionTable.KEY_ID, t.getTransactionId());
         values.put(TransactionTable.KEY_TYPE, t.getTransactionType());
         values.put(TransactionTable.KEY_USERNAME, t.getTransactionUsername());
         values.put(TransactionTable.KEY_TRANSACTION_DATE, t.getTransactionDate());
@@ -168,11 +169,38 @@ public class DatabaseHelper extends SQLiteOpenHelper{
     public Hold getHold(int bookId, String pickupDate) {
         SQLiteDatabase db = this.getReadableDatabase();
 
+        String selectionArgs = HoldTable.KEY_BOOK_ID + " = ? AND " + HoldTable.KEY_PICKUP_DATE + " = ? ";
+
         Cursor cursor = db.query(HoldTable.HOLDS_DATA,
                 HoldTable.COLUMNS,
-                HoldTable.KEY_ID + " = ? AND " +
-                HoldTable.KEY_PICKUP_DATE + " = ? ",
+                selectionArgs,
                 new String[] { String.valueOf(bookId), pickupDate },
+                null, null, null, null);
+
+        if (cursor != null) {
+            cursor.moveToFirst();
+        }
+        // KEY_ID, user_id, book_id, pickup_date, return_date, price
+        Hold hold = new Hold();
+        hold.setId(Integer.parseInt(cursor.getString(0)));
+        hold.setUserId(Integer.parseInt(cursor.getString(1)));
+        hold.setBookId(Integer.parseInt(cursor.getString(2)));
+        hold.setPickupDate(cursor.getString(3));
+        hold.setReturnDate(cursor.getString(4));
+        hold.setPrice(Double.parseDouble(cursor.getString(5)));
+
+        db.close();
+        return hold;
+    }
+
+    // find unique hold
+    public Hold getHold(String pickupDate) {
+        SQLiteDatabase db = this.getReadableDatabase();
+
+        Cursor cursor = db.query(HoldTable.HOLDS_DATA,
+                HoldTable.COLUMNS,
+                HoldTable.KEY_PICKUP_DATE + " = ? ",
+                new String[] { pickupDate },
                 null, null, null, null);
 
         if (cursor != null) {
@@ -457,5 +485,13 @@ public class DatabaseHelper extends SQLiteOpenHelper{
         db.close();
 
         Log.d("deleteAllUsers", "Deleted all Users");
+    }
+
+    public void deleteAllTransactions() {
+        SQLiteDatabase db = this.getWritableDatabase();
+        db.delete(TransactionTable.TABLE_TRANSACTIONS,"",new String[]{});
+        db.close();
+
+        Log.d("deleteAllTransactions", "Deleted all Transactions");
     }
 }

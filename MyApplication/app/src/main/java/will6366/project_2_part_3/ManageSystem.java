@@ -6,20 +6,29 @@ import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 import will6366.project_2_part_3.helperObjects.DatabaseHelper;
+import will6366.project_2_part_3.helperObjects.Transaction;
 import will6366.project_2_part_3.helperObjects.User;
 
 public class ManageSystem extends AppCompatActivity {
 
     User admin;
+    TextView logs;
+    public final String TAG = "ManageSystem";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_manage_system);
+        Log.d(TAG,"Arrived");
+        logs = (TextView) findViewById(R.id.manage_system_log_data);
 
         // Get admin user from id
         try {
@@ -32,8 +41,18 @@ public class ManageSystem extends AppCompatActivity {
             startActivity (new Intent(ManageSystem.this, MainMenu.class));
         }
 
-        //TODO: fill TextView "manage_system_log_data" with transaction data
-
+        //Fill TextView "manage_system_log_data" with transaction data
+        DatabaseHelper db = new DatabaseHelper(ManageSystem.this);
+        try {
+            ArrayList<Transaction> transactions = db.getAllTransactions();
+            logs.setText("");
+            for (int i = 0; i < transactions.size(); i++) {
+                logs.setText(logs.getText() +""+ transactions.get(i)+"\n\n");
+            }
+        } catch (Exception e) {
+            Log.d(TAG,e.getMessage());
+        }
+        db.close();
     }
 
     public static Intent newIntent(Context packageContext, int userId) {
@@ -43,7 +62,8 @@ public class ManageSystem extends AppCompatActivity {
     }
 
     public void addNewBook(View view) {
-        startActivity(new Intent(ManageSystem.this,ManageSystemAddBook.class));
+        Intent i = ManageSystemAddBook.newIntent(ManageSystem.this, admin.getUserId());
+        startActivity(i);
     }
 
     public void resetDatabase(View view) {
@@ -65,6 +85,7 @@ public class ManageSystem extends AppCompatActivity {
                         db.deleteAllBooks();
                         db.deleteAllHolds();
                         db.deleteAllUsers();
+                        db.deleteAllTransactions();
                         db.addUser(new User("!admin2","!admin2",true));
                         db.close();
                         Toast.makeText(ManageSystem.this, "Database Reset!", Toast.LENGTH_LONG).show();

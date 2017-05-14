@@ -182,8 +182,8 @@ public class Transaction {
         if (this.mTransactionType.equals("New Account")) {
             return "Transaction Type: New Account" +
                     "\nCustomer's Username: " + this.mUsername +
-                    "\nTransaction Date" + this.mTransactionDate +
-                    "\nTransaction Time" + this.mTransactionTime;
+                    "\nTransaction Date " + this.mTransactionDate +
+                    "\nTransaction Time " + this.mTransactionTime;
         } else if (this.mTransactionType.equals("Place Hold") || this.mTransactionType.equals("Cancel Hold") ) {
             return "Transaction Type: " + this.mTransactionType +
                     "\nCustomer's Username: " + this.mUsername +
@@ -191,8 +191,8 @@ public class Transaction {
                     "\nPickup Date/Time: " + this.mHoldPickupDate+
                     "\nReturn Date/Time: " + this.mHoldReturnDate+
                     "\nReservation Number: " + this.mHoldReservationNumber+
-                    "\nTransaction Date" + this.mTransactionDate +
-                    "\nTransaction Time" + this.mTransactionTime;
+                    "\nTransaction Date " + this.mTransactionDate +
+                    "\nTransaction Time " + this.mTransactionTime;
         } else if (this.mTransactionType.equals("Book Added")) {
             return "Transaction Type: Book Added" +
                     "\nAdministrator Username: " + this.mUsername +
@@ -200,8 +200,8 @@ public class Transaction {
                     "\nBook Author: "+this.mBookAuthor+
                     "\nBook ISBN: "+this.mBookISBN+
                     "\nBook Hourly Fee: "+this.mBookHourlyFee+
-                    "\nTransaction Date" + this.mTransactionDate +
-                    "\nTransaction Time" + this.mTransactionTime;
+                    "\nTransaction Date " + this.mTransactionDate +
+                    "\nTransaction Time " + this.mTransactionTime;
         }
         return "Invalid Transaction Type";
     }

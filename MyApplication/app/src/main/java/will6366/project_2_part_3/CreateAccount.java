@@ -10,7 +10,11 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import will6366.project_2_part_3.helperObjects.DatabaseHelper;
+import will6366.project_2_part_3.helperObjects.Transaction;
 import will6366.project_2_part_3.helperObjects.User;
 
 
@@ -32,15 +36,27 @@ public class CreateAccount extends AppCompatActivity {
         //Check format of username and password with Regex
         if (isCorrectFormat(username,password)) {
             Log.d("isCorrectFormat", "true");
-            //TODO: make a database
+            //Make a database
             DatabaseHelper db = new DatabaseHelper(this);
 
             //Check db for username
             //Add user to db
             try {
                 db.addUser(new User(username,password,false));
+
+                // -------------------------------------------- TRANSACTION STUFF ---------------------------------------------
+                    /*
+                    public Transaction(String transactionType, String username, String transactionDate, String transactionTime, String bookTitle, String bookAuthor,
+                            int bookISBN, double bookHourlyFee, String holdPickupDate, String holdReturnDate, int holdReservationNumber)
+                     */
+
+                String date =  new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                db.addTransaction(new Transaction("New Account",username,date,time,"","",0,0,"","",0));
+                // ------------------------------------------ END TRANSACTION STUFF ------------------------------------------
+
                 db.close();
-                //TODO: message user for success or failure
+                //Message user for success or failure
                 //Toast.makeText(this,"User created successfully!", Toast.LENGTH_SHORT).show();
                 makeAlert("Account Creation","Account created successfully! Select Ok to return to main menu");
             } catch (Exception e) {

@@ -25,7 +25,8 @@
     <string name="date_format">Date: yyyy-mm-dd hh:mm</string>
     <string name="cancel_hold">Cancel Hold</string>
     <string name="manage_system">Manage System</string>
-    <string name="logs">Logs: </string>
+    <string name="date_format_info">[Dates: yyyy-mm-dd] [Times (24hr): hh:mm:ss]</string>
+    <string name="logs">Logs:</string>
     <string name="addBook">Add New Book</string>
     <string name="resetDatabase">Reset Database</string>
 

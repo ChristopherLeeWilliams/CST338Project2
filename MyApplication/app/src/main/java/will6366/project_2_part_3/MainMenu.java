@@ -38,11 +38,11 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 nextActivity = CancelHoldLogin.class;
                 break;
             case R.id.manage_system_button:
-                Log.d("click","Manage Hold");
+                Log.d("click","Manage System");
                 nextActivity = ManageSystemLogin.class;
                 break;
             default:
-                //Log.d("click","Default");
+                Log.d("click","Default");
                 nextActivity = MainMenu.class;
                 break;
         }

@@ -11,9 +11,14 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import will6366.project_2_part_3.helperObjects.Book;
 import will6366.project_2_part_3.helperObjects.DatabaseHelper;
 import will6366.project_2_part_3.helperObjects.Hold;
+import will6366.project_2_part_3.helperObjects.Transaction;
 import will6366.project_2_part_3.helperObjects.User;
 
 public class PlaceHoldLogin extends AppCompatActivity {
@@ -57,7 +62,19 @@ public class PlaceHoldLogin extends AppCompatActivity {
                     db.addHold(temp);
                     //ArrayList<Hold> a = db.getAllHolds();
                     //Log.d("Expected Match Hold","DB) "+a.get(a.size()-1)+" \nLocal: "+temp);
+                    int holdId = db.getHold(mBook.getId(),mPickupDate).getId();
 
+                    // -------------------------------------------- TRANSACTION STUFF ---------------------------------------------
+                    /*
+
+                    public Transaction(String transactionType, String username, String transactionDate, String transactionTime, String bookTitle, String bookAuthor,
+                            int bookISBN, double bookHourlyFee, String holdPickupDate, String holdReturnDate, int holdReservationNumber)
+                     */
+
+                    String date =  new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                    String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                    db.addTransaction(new Transaction("Place Hold",user.getUsername(),date,time,mBook.getTitle(),"",0,0,mPickupDate,mReturnDate,holdId));
+                    // ------------------------------------------ END TRANSACTION STUFF ------------------------------------------
                     db.close();
                     //(yyyy-mm-dd hh-mm-ss):
                     makeErrorAlert("Hold Placed!","" +
@@ -65,7 +82,7 @@ public class PlaceHoldLogin extends AppCompatActivity {
                             "\nPickup date/time: "+mPickupDate+
                             "\nReturn date/time: "+mReturnDate+
                             "\nBook Title: "+ mBook.getTitle()+
-                            "\nReservation number: ??" +
+                            "\nReservation number: " + holdId +
                             "\nTotal amount: $"+mPrice);
 
                     // then add it to holds and transactions

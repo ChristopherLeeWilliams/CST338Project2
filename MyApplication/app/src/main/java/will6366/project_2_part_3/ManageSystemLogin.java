@@ -58,7 +58,7 @@ public class ManageSystemLogin extends AppCompatActivity {
 
             } catch (Exception e) {
                 // catch exception thrown from SQLite
-                Toast.makeText(this,"Something went wrong: "+e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Something went wrong: "+e.getMessage(), Toast.LENGTH_LONG).show();
                 db.close();
                 numberOfErrors++;
                 if (numberOfErrors == 2) {startActivity(new Intent(this,MainMenu.class));}

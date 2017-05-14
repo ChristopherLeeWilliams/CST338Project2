@@ -1,23 +1,29 @@
 package will6366.project_2_part_3;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import will6366.project_2_part_3.helperObjects.Book;
 import will6366.project_2_part_3.helperObjects.DatabaseHelper;
+import will6366.project_2_part_3.helperObjects.Transaction;
 
 public class ManageSystemAddBook extends AppCompatActivity {
 
     EditText title, author, isbn, hourlyFee;
     String bookTitle;
     String bookAuthor;
-    int bookISBN;
+    int bookISBN, userId;
     double bookHourlyFee;
 
     @Override
@@ -28,6 +34,7 @@ public class ManageSystemAddBook extends AppCompatActivity {
         author = (EditText) findViewById(R.id.book_author_input);
         isbn = (EditText) findViewById(R.id.book_isbn_input);
         hourlyFee = (EditText) findViewById(R.id.book_hourly_fee_input);
+        userId = getIntent().getIntExtra("userId",0);
     }
 
     public void makeConfirmationAddBookAlert(String title, String message) {
@@ -39,6 +46,20 @@ public class ManageSystemAddBook extends AppCompatActivity {
                         try {
                             DatabaseHelper db = new DatabaseHelper(ManageSystemAddBook.this);
                             db.addBook(new Book(bookTitle,bookAuthor,bookISBN,bookHourlyFee));
+                            try {
+                                // -------------------------------------------- TRANSACTION STUFF ---------------------------------------------
+                            /*
+                            public Transaction(String transactionType, String username, String transactionDate, String transactionTime, String bookTitle, String bookAuthor,
+                                    int bookISBN, double bookHourlyFee, String holdPickupDate, String holdReturnDate, int holdReservationNumber)
+                             */
+
+                                String date = new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                                String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                                db.addTransaction(new Transaction("Book Added", db.getUser(userId).getUsername(), date, time, bookTitle, bookAuthor, bookISBN, bookHourlyFee, "", "", 0));
+                                // ------------------------------------------ END TRANSACTION STUFF ------------------------------------------
+                            } catch (Exception e) {
+                                Log.d("ManageSystemAddBook",e.getMessage());
+                            }
                             db.close();
                             Toast.makeText(ManageSystemAddBook.this, "Book added successfully!", Toast.LENGTH_SHORT).show();
                             startActivity(new Intent(ManageSystemAddBook.this, MainMenu.class));
@@ -74,5 +95,11 @@ public class ManageSystemAddBook extends AppCompatActivity {
         }
 
 
+    }
+
+    public static Intent newIntent(Context packageContext, int userId) {
+        Intent intent = new Intent(packageContext, ManageSystemAddBook.class);
+        intent.putExtra("userId",userId);
+        return intent;
     }
 }

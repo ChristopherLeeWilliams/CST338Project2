@@ -13,11 +13,14 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import will6366.project_2_part_3.helperObjects.Book;
 import will6366.project_2_part_3.helperObjects.DatabaseHelper;
 import will6366.project_2_part_3.helperObjects.Hold;
+import will6366.project_2_part_3.helperObjects.Transaction;
 
 public class CancelHoldSelection extends AppCompatActivity {
 
@@ -92,6 +95,17 @@ public class CancelHoldSelection extends AppCompatActivity {
                     public void onClick(DialogInterface dialog, int which) {
                         DatabaseHelper db = new DatabaseHelper(CancelHoldSelection.this);
                         db.deleteHold(selectedHold.getId());
+                        // -------------------------------------------- TRANSACTION STUFF ---------------------------------------------
+                        /*
+                        public Transaction(String transactionType, String username, String transactionDate, String transactionTime, String bookTitle, String bookAuthor,
+                                int bookISBN, double bookHourlyFee, String holdPickupDate, String holdReturnDate, int holdReservationNumber)
+                         */
+
+                        String date =  new SimpleDateFormat("yyyy/MM/dd").format(new Date());
+                        String time = new SimpleDateFormat("HH:mm:ss").format(new Date());
+                        db.addTransaction(new Transaction("Cancel Hold",db.getUser(userId).getUsername(),date,time,db.getBook(selectedHold.getBookId()).getTitle(),
+                                                            "",0,0,selectedHold.getPickupDate(),selectedHold.getReturnDate(),selectedHold.getId()));
+                        // ------------------------------------------ END TRANSACTION STUFF ------------------------------------------
                         db.close();
                         Toast.makeText(CancelHoldSelection.this, "Hold Cancelled!", Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(CancelHoldSelection.this, MainMenu.class));
