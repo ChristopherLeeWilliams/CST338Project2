@@ -189,7 +189,7 @@ public class PlaceHold extends AppCompatActivity {
     public void submitHold(View v) {
         if (datesSelected()) {
             if (SevenDaysOrLess()) {
-                //TODO: Check if book is available
+                //Check if book is available
                 //DB requires: YYYY-MM-DD HH:MM:SS
                 String pickupDateForDB = String.format("%04d-%02d-%02d %02d:%02d:%02d",pYear,pMonth,pDay,pHour,pMinute,0);
                 String returnDateForDB = String.format("%04d-%02d-%02d %02d:%02d:%02d",rYear,rMonth,rDay,rHour,rMinute,0);

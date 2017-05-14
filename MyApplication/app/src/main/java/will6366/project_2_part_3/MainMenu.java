@@ -5,7 +5,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 
 public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
@@ -27,7 +26,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
 
         switch (view.getId()) {
             case R.id.create_account_button:
-                //Log.d("click","Create Account");
+                Log.d("click","Create Account");
                 nextActivity = CreateAccount.class;
                 break;
             case R.id.place_hold_button:
@@ -35,15 +34,16 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 nextActivity = PlaceHold.class;
                 break;
             case R.id.cancel_hold_button:
-                //Log.d("click","Cancel Hold");
-                nextActivity = CancelHold.class;
+                Log.d("click","Cancel Hold");
+                nextActivity = CancelHoldLogin.class;
                 break;
             case R.id.manage_system_button:
-                //Log.d("click","Manage Hold");
-
+                Log.d("click","Manage Hold");
+                
                 break;
             default:
                 //Log.d("click","Default");
+                nextActivity = MainMenu.class;
                 break;
         }
 

@@ -8,35 +8,38 @@
     android:orientation="vertical"
     android:gravity="center"
     android:padding="16dp"
-    tools:context="will6366.project_2_part_3.PlaceHoldBookSelection">
+    tools:context="will6366.project_2_part_3.CancelHoldSelection">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="@string/place_hold_book_selection_title"
+        android:layout_marginBottom="30dp"
+        android:text="@string/cancel_hold_selection_title"
         android:textSize="30sp"/>
-
     <TextView
-        android:id="@+id/selected_hold_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:textSize="14sp"/>
-
+        android:layout_marginBottom="10dp"
+        android:text="@string/date_format"/>
     <Spinner
-        android:id="@+id/book_drop_down"
-        android:layout_width="240dp"
+        android:id="@+id/hold_drop_down"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:drawable/btn_dropdown"
-        android:spinnerMode="dropdown" />
+        android:padding="5dp"
+        android:spinnerMode="dropdown"/>
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:textSize="16sp"
-        android:text="@string/submit"
-        android:onClick="submit"/>
+        android:text="@string/cancel_hold"
+        android:onClick="submit_hold_cancel"/>
 
 </LinearLayout>
+
+
+
+
+

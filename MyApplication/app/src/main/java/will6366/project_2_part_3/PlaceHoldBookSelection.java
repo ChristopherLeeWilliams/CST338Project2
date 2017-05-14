@@ -1,7 +1,9 @@
 package will6366.project_2_part_3;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -25,7 +28,7 @@ public class PlaceHoldBookSelection extends AppCompatActivity {
     ArrayList<Book> books;
     ArrayList<String> bookStrings;
     Book selectedBook;
-
+    int numberOfErrors = 0;
 
 
     @Override
@@ -48,12 +51,20 @@ public class PlaceHoldBookSelection extends AppCompatActivity {
 
         Spinner dropdown = (Spinner)findViewById(R.id.book_drop_down);
 
-        books = db.getAllBooks();
-        bookStrings = db.getAllBookTitlesWithAuthors();
+        books = db.getAllBooksAvailable(pickupDate,returnDate);
+        db.close();
 
-        ArrayAdapter<String> bookAdapter  = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item, bookStrings);
-        dropdown.setAdapter(bookAdapter);
-        dropdown.setSelection(0);
+        if (books.size()>0) {
+            bookStrings = booksToString(books);
+
+            ArrayAdapter<String> bookAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, bookStrings);
+            dropdown.setAdapter(bookAdapter);
+            dropdown.setSelection(0);
+        } else {
+            // no books were available
+            makeErrorAlert("No Books Found!", "There are no books available for holds within the timeline specified, press Ok " +
+                    "to return to the main menu.");
+        }
 
         dropdown.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -63,17 +74,53 @@ public class PlaceHoldBookSelection extends AppCompatActivity {
             }
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                // sometimes you need nothing here
+                // nothing
             }
         });
     }
 
+    public ArrayList<String> booksToString(ArrayList<Book> books) {
+        ArrayList<String> a = new ArrayList<>();
+        for(int i = 0; i< books.size(); i++){
+            a.add(books.get(i).getTitle()+" By "+books.get(i).getAuthor());
+        }
+        return a;
+    }
+
+    public void makeErrorAlert(String title, String message) {
+        new AlertDialog.Builder(this)
+                .setTitle(title)
+                .setMessage(message)
+                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        startActivity(new Intent(PlaceHoldBookSelection.this,MainMenu.class));
+                    }
+                })
+                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .show();
+    }
 
     public static Intent newIntent(Context packageContext, String pickupDate, String returnDate, long holdHours) {
         Intent intent = new Intent(packageContext, PlaceHoldBookSelection.class);
         intent.putExtra("pickupDate",pickupDate);
         intent.putExtra("returnDate",returnDate);
-        intent.putExtra("holdHours",holdHours);
+        int hHours = (int)holdHours;
+        intent.putExtra("holdHours",hHours);
         return intent;
+    }
+
+    public void submit(View view) {
+        if (selectedBook != null) {
+            Intent i = PlaceHoldLogin.newIntent(PlaceHoldBookSelection.this,pickupDate,returnDate,holdHours,selectedBook.getId());
+            startActivity(i);
+        } else {
+            Toast.makeText(this, "No book selected!", Toast.LENGTH_SHORT).show();
+            numberOfErrors++;
+            if (numberOfErrors == 2) {startActivity(new Intent(this,MainMenu.class));}
+        }
     }
 }

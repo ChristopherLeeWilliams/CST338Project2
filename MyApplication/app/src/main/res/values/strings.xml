@@ -19,5 +19,10 @@
     <string name="submit">Submit</string>
 
     <string name="place_hold_book_selection_title">Select Book</string>
-    <string name="place_hold_login_title">Login</string>
+    <string name="cancel_hold_selection_title">Select Hold</string>
+    <string name="login_title">Login</string>
+
+    <string name="date_format">Date: yyyy-mm-dd hh:mm</string>
+    <string name="cancel_hold">Cancel Hold</string>
+    <string name="manage_system">Manage System</string>
 </resources>

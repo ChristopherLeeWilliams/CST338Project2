@@ -1,8 +1,6 @@
 package will6366.project_2_part_3;
 
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -13,53 +11,61 @@ import android.widget.Toast;
 import will6366.project_2_part_3.helperObjects.DatabaseHelper;
 import will6366.project_2_part_3.helperObjects.User;
 
+public class CancelHoldLogin extends AppCompatActivity {
 
-public class CreateAccount extends AppCompatActivity {
+    private static final String TAG = "CancelHoldLogin";
     private int numberOfErrors = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_account);
+        setContentView(R.layout.activity_cancel_hold_login);
     }
 
-    public void createUser(View view) {
-        Log.d("createUser"," in create user");
+    public void cancel_hold_login(View view) {
+        Log.d("Cancel_Hold_login"," in login");
 
         //Get user input
-        String username = ( (EditText)findViewById(R.id.user_name) ).getText().toString();
-        String password = ( (EditText)findViewById(R.id.create_account_password) ).getText().toString();
+        String username = ( (EditText)findViewById(R.id.cancel_hold_user_name) ).getText().toString();
+        String password = ( (EditText)findViewById(R.id.cancel_hold_password) ).getText().toString();
 
         //Check format of username and password with Regex
         if (isCorrectFormat(username,password)) {
             Log.d("isCorrectFormat", "true");
-            //TODO: make a database
             DatabaseHelper db = new DatabaseHelper(this);
-
-            //Check db for username
-            //Add user to db
             try {
-                db.addUser(new User(username,password,false));
-                db.close();
-                //TODO: message user for success or failure
-                //Toast.makeText(this,"User created successfully!", Toast.LENGTH_SHORT).show();
-                makeAlert("Account Creation","Account created successfully! Select Ok to return to main menu");
+                User user = db.getUser(username);
+                if (password.equals(user.getPassword())) {
+                    db.close();
+                    //New intent to send userId
+                    Log.d("User which matched",user.toString()+" id is? "+user.getUserId());
+                    Intent i = CancelHoldSelection.newIntent(CancelHoldLogin.this, user.getUserId());
+                    startActivity(i);
+                } else {
+                    Toast.makeText(this,"Incorrect Password", Toast.LENGTH_SHORT).show();
+                    db.close();
+                    numberOfErrors++;
+                    if (numberOfErrors == 2) {startActivity(new Intent(this,MainMenu.class));}
+                }
+                //startActivity(new Intent(this,MainMenu.class));
+
             } catch (Exception e) {
                 // catch exception thrown from SQLite
-                Toast.makeText(this,"Username taken", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this,"Something went wrong: "+e.getMessage(), Toast.LENGTH_SHORT).show();
                 db.close();
                 numberOfErrors++;
-                if (numberOfErrors == 2) {finish();}
+                if (numberOfErrors == 2) {startActivity(new Intent(this,MainMenu.class));}
                 return;
             }
 
         } else {
             Log.d("isCorrectFormat", "false");
-            Toast.makeText(this, "Incorrect Username or Password Format", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Incorrect Username or Password", Toast.LENGTH_SHORT).show();
             numberOfErrors++;
-            if (numberOfErrors == 2) {finish();}
+            if (numberOfErrors == 2) {startActivity(new Intent(this,MainMenu.class));}
         }
-
     }
+
 
     public boolean isCorrectFormat(String u, String p) {
         //https://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html
@@ -85,21 +91,4 @@ public class CreateAccount extends AppCompatActivity {
         return true;
     }
 
-    public void makeAlert(String title, String message) {
-        new AlertDialog.Builder(this)
-                .setTitle(title)
-                .setMessage(message)
-                .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // continue with delete
-                        startActivity(new Intent(CreateAccount.this,MainMenu.class));
-                    }
-                })
-                .setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // do nothing
-                    }
-                })
-                .show();
-    }
 }

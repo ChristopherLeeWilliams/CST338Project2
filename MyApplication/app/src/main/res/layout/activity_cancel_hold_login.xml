@@ -8,14 +8,14 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center"
-    tools:context="will6366.project_2_part_3.CreateAccount">
+    tools:context="will6366.project_2_part_3.CancelHoldLogin">
 
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/create_account_title"
+        android:text="@string/login_title"
         android:textSize="30sp"/>
 
     <LinearLayout
@@ -31,7 +31,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/user_name"/>
+            android:id="@+id/cancel_hold_user_name"
+            android:inputType="text"/>
 
     </LinearLayout>
 
@@ -48,7 +49,7 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/create_account_password"
+            android:id="@+id/cancel_hold_password"
             android:inputType="textPassword"/>
 
     </LinearLayout>
@@ -57,7 +58,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/create_account_button"
-        android:onClick="createUser"/>
+        android:text="@string/submit"
+        android:onClick="cancel_hold_login"/>
 
 </LinearLayout>
+
+
+
+

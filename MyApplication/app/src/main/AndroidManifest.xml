@@ -20,11 +20,17 @@
         </activity>
         <activity android:name=".PlaceHold">
         </activity>
-        <activity android:name=".CancelHold">
+        <activity android:name=".CancelHoldLogin">
         </activity>
         <activity android:name=".PlaceHoldLogin">
         </activity>
         <activity android:name=".PlaceHoldBookSelection">
+        </activity>
+        <activity android:name=".CancelHoldSelection">
+        </activity>
+        <activity android:name=".ManageSystemLogin">
+        </activity>
+        <activity android:name=".ManageSystem">
         </activity>
     </application>
 

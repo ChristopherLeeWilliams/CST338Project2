@@ -85,7 +85,7 @@ public class Hold {
                 ", mBookId=" + mBookId +
                 ", mUserId=" + mUserId +
                 ", mPickupDate='" + mPickupDate + '\'' +
-                ", mreturnDate='" + mreturnDate + '\'' +
+                ", mReturnDate='" + mreturnDate + '\'' +
                 ", mPrice=" + mPrice +
                 '}';
     }

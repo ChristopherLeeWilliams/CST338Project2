@@ -8,14 +8,13 @@
     android:orientation="vertical"
     android:padding="16dp"
     android:gravity="center"
-    tools:context="will6366.project_2_part_3.CreateAccount">
+    tools:context="will6366.project_2_part_3.ManageSystemLogin">
 
     <TextView
-        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:text="@string/create_account_title"
+        android:text="@string/login_title"
         android:textSize="30sp"/>
 
     <LinearLayout
@@ -31,7 +30,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/user_name"/>
+            android:inputType="text"
+            android:id="@+id/manage_system_user_name"/>
 
     </LinearLayout>
 
@@ -48,8 +48,8 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/create_account_password"
-            android:inputType="textPassword"/>
+            android:inputType="textPassword"
+            android:id="@+id/manage_system_password"/>
 
     </LinearLayout>
 
@@ -57,7 +57,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/create_account_button"
-        android:onClick="createUser"/>
+        android:text="@string/manage_system"/>
 
 </LinearLayout>
