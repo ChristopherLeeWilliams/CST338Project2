@@ -57,6 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:text="@string/manage_system"/>
+        android:text="@string/manage_system"
+        android:onClick="manage_system_login"/>
 
 </LinearLayout>

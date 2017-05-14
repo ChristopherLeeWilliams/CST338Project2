@@ -39,7 +39,7 @@ public class MainMenu extends AppCompatActivity implements View.OnClickListener{
                 break;
             case R.id.manage_system_button:
                 Log.d("click","Manage Hold");
-                
+                nextActivity = ManageSystemLogin.class;
                 break;
             default:
                 //Log.d("click","Default");

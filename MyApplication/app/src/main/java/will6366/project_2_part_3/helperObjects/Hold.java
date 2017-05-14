@@ -81,7 +81,6 @@ public class Hold {
     @Override
     public String toString() {
         return "Hold{" +
-                "mId=" + mId +
                 ", mBookId=" + mBookId +
                 ", mUserId=" + mUserId +
                 ", mPickupDate='" + mPickupDate + '\'' +

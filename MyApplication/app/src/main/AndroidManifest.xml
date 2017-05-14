@@ -32,6 +32,8 @@
         </activity>
         <activity android:name=".ManageSystem">
         </activity>
+        <activity android:name=".ManageSystemAddBook">
+        </activity>
     </application>
 
 </manifest>

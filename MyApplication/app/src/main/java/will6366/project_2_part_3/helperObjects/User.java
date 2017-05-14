@@ -60,7 +60,6 @@ public class User {
         return "User{" +
                 "username='" + username + '\'' +
                 ", Admin=" + isAdmin +
-                ", userId=" + userId +
                 '}';
     }
 }

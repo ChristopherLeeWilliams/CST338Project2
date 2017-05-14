@@ -23,7 +23,7 @@ public class ManageSystemLogin extends AppCompatActivity {
     }
 
 
-    public void cancel_hold_login(View view) {
+    public void manage_system_login(View view) {
         Log.d("Cancel_Hold_login"," in login");
 
         //Get user input
@@ -38,9 +38,16 @@ public class ManageSystemLogin extends AppCompatActivity {
                 User user = db.getUser(username);
                 if (password.equals(user.getPassword())) {
                     db.close();
-                    //New intent to send userId
-                    //Intent i = CancelHoldSelection.newIntent(CancelHoldLogin.this, user.getUserId());
-                    //startActivity(i);
+                    if(user.isAdmin() == 1) {
+                        //New intent to send userId
+                        Intent i = ManageSystem.newIntent(ManageSystemLogin.this, user.getUserId());
+                        startActivity(i);
+                    } else {
+                        Toast.makeText(this,"Manage System is only available for administrators.", Toast.LENGTH_LONG).show();
+                        db.close();
+                        numberOfErrors++;
+                        if (numberOfErrors == 2) {startActivity(new Intent(this,MainMenu.class));}
+                    }
                 } else {
                     Toast.makeText(this,"Incorrect Password", Toast.LENGTH_SHORT).show();
                     db.close();

@@ -25,4 +25,12 @@
     <string name="date_format">Date: yyyy-mm-dd hh:mm</string>
     <string name="cancel_hold">Cancel Hold</string>
     <string name="manage_system">Manage System</string>
+    <string name="logs">Logs: </string>
+    <string name="addBook">Add New Book</string>
+    <string name="resetDatabase">Reset Database</string>
+
+    <string name="book_title">Title: </string>
+    <string name="book_author">Author: </string>
+    <string name="book_isbn">ISBN: </string>
+    <string name="book_hourly_fee">Hourly Fee: $</string>
 </resources>

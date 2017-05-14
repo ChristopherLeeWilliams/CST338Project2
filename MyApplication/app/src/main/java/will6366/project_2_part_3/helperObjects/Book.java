@@ -33,6 +33,14 @@ public class Book {
         mHourlyFee = 0;
     }
 
+    public Book(String title, String author, int ISBN, double hourlyFee) {
+        mId = 0;
+        mTitle = title;
+        mAuthor = author;
+        mISBN = ISBN;
+        mHourlyFee = hourlyFee;
+    }
+
     public Book(int id, String title, String author, int ISBN, double hourlyFee) {
         mId = id;
         mTitle = title;
@@ -85,7 +93,6 @@ public class Book {
     @Override
     public String toString() {
         return "Book{" +
-                "mId=" + mId +
                 ", mTitle='" + mTitle + '\'' +
                 ", mAuthor='" + mAuthor + '\'' +
                 ", mISBN=" + mISBN +
